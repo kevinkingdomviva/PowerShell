@@ -1,4 +1,7 @@
 #! /bin/sh
+inif=$1
+exif=$2
+sport=$3
 read -p "type in internal interface: " inif
 read -p "type in external interface: " exif
 read -p "type in socks port: " sport
