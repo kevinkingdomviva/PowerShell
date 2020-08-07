@@ -2,9 +2,9 @@
 inif=$1
 exif=$2
 sport=$3
-read -p "type in internal interface: " inif
-read -p "type in external interface: " exif
-read -p "type in socks port: " sport
+#read -p "type in internal interface: " inif
+#read -p "type in external interface: " exif
+#read -p "type in socks port: " sport
 echo "ok.. please wait a few minute!"
 sleep 3
 sudo apt-get update -y
@@ -25,7 +25,7 @@ logoutput: syslog
 internal: $inif port = $sport
 external: $exif
 external.rotation: same-same
-method: username none
+method: username
 user.privileged: proxy
 user.notprivileged: nobody
 client pass {
@@ -36,12 +36,20 @@ client block {
 }
 pass {
         from: 0.0.0.0/0 to: 0.0.0.0/0
+		command: bind connect udpassociate
+		log: error connect disconnect
+		socksmethod: username
         protocol: tcp udp
 }
 block {
         from: 0.0.0.0/0 to: 0.0.0.0/0
 }
 EOF"
+
+# add user with password
+useradd dante_user
+echo 'dante_user_password' | sudo passwd --stdin dante_user
+
 sudo bash -c 'cat <<EOF > /etc/sockd.sh
 #! /bin/sh
 sudo /usr/local/sbin/sockd -D -N 2 -f /etc/danted.conf
