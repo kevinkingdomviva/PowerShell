@@ -1,4 +1,5 @@
-#! /bin/shecho -e "net.ipv4.ip_forward=1" >> /etc/sysctl.conf 
+#! /bin/sh
+echo -e "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 sysctl -p
 iptables -t nat -A PREROUTING  -p tcp --dport 35001 -j DNAT --to-destination 35.167.139.156:12000
 iptables -t nat -A PREROUTING  -p udp --dport 35001 -j DNAT --to-destination 35.167.139.156:12000
